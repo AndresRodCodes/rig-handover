@@ -15,7 +15,8 @@ in a shell this agent can run.
    One issue per unit of work.
 3. **Stop and show the table to the human.** Publish nothing until they approve it.
 4. Ask the human what every issue here must carry (fields, labels, wording), unless it is
-   already written down in this session or in the repo.
+   already written down in this session or in the repo. For this repo it is: see
+   [What every issue carries](#what-every-issue-carries).
 5. Create each issue in dependency order, so blocked-by can cite real numbers:
 
    ```sh
@@ -23,6 +24,33 @@ in a shell this agent can run.
    ```
 
 6. Record every issue URL from gh's output (not from memory) and reply with the list.
+
+## What every issue carries
+
+Approved by the human for the morning-digest plan (2026-10-30); use it for every plan here.
+
+- Label `plan:<plan>`, the `plan:` value from `plan.md`'s frontmatter (e.g. `plan:morning-digest`).
+- The body opens with this line, exactly: `Source: plan.md § <n>` (`§ 2a` for a subsection).
+- Then these sections, in this order:
+
+  ```md
+  Source: plan.md § <n>
+
+  ## Scope
+  <what this issue changes, and what it leaves to other issues>
+
+  ## Done when
+  <the plan's done condition, checkable>
+
+  ## Blocked by
+  <#n, or —. "#n to start. Closes only once #m is in." when it can start before it can close>
+
+  ## Suggested worker
+  <harness> · <model> · <effort> (<why: logic, view, tests, ...>)
+  ```
+
+- An issue whose "Done when" needs a person (a reviewer, the human) says so under
+  "Blocked by" and stays open until that person has answered. Sending the link is not the review.
 
 Closing one, with the closing comment from AGENTS.md:
 
