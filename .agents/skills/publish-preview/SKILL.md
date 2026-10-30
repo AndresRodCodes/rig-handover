@@ -19,7 +19,7 @@ Needs `gh`, authenticated, with `repo` and `workflow` scopes. Every step here is
 R=<owner>/<repo>
 gh api -X POST repos/$R/pages -f build_type=workflow          # once: Pages from Actions
 gh variable set LANE_MARKER --repo $R --body "<marker>"       # the banner's marker
-gh workflow run preview --repo $R -f path=/digest/<night>
+gh workflow run preview --repo $R -f night=<night>
 gh run watch --repo $R "$(gh run list --repo $R --workflow preview --limit 1 --json databaseId --jq '.[0].databaseId')"
 gh api repos/$R/pages --jq .html_url                           # the link
 ```
@@ -30,11 +30,14 @@ Check the link serves the page with the marker: `curl -fsS <link> | grep -o 'cla
 
 ```sh
 gh variable delete LANE_MARKER --repo $R
-gh workflow run preview --repo $R -f path=/digest/<night>
+gh workflow run preview --repo $R -f night=<night>
 ```
 
 Watch the run, then check the same link: the banner reads `no marker set` and the marker is gone.
 Pages can cache for a few minutes; add `?v=<anything>` to the check.
+
+Pass the night, not a path: Git Bash on Windows rewrites an argument like `/digest/...` into a
+Windows path before `gh` sees it.
 
 ## Take it down
 
