@@ -1,0 +1,50 @@
+# Plan morning-digest § 3–4 (ADR 0003). Renders one rig page in CI and deploys it to GitHub Pages
+# as a Pages artifact: the preview is never committed. The banner's marker comes from the repo
+# variable LANE_MARKER; delete the variable and run this again to upload the page without it.
+name: preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: rig page to save as the preview
+        default: /digest/2026-10-28
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: corepack pnpm@10.20.0 install
+      - name: Save the page as one HTML file
+        env:
+          LANE_MARKER: ${{ vars.LANE_MARKER }}
+          PAGE: ${{ inputs.path }}
+        run: |
+          corepack pnpm@10.20.0 start &
+          for i in $(seq 30); do curl -fsS http://localhost:8787/health >/dev/null && break; sleep 1; done
+          mkdir site
+          curl -fsS "http://localhost:8787$PAGE" -o site/index.html
+          kill %1
+          grep -o '<span class="marker">[^<]*</span>' site/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
