@@ -24,7 +24,7 @@ export function StatusBoard({ status }: { status: Status }) {
               <a href={`/digest/${night}`}>{night}</a>
               {counts && (
                 <>
-                  {' · ok '}{counts.ok}{' · retry '}{counts.retry}{' · '}
+                  {' Â· ok '}{counts.ok}{' Â· retry '}{counts.retry}{' Â· '}
                   <span class={counts.fail > 0 ? 'warn' : undefined}>fail {counts.fail}</span>
                 </>
               )}

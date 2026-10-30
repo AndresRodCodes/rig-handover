@@ -14,8 +14,8 @@ describe('status board', () => {
     expect(html).toContain('href="/digest/2026-10-27"');
     expect(html).toContain('href="/digest/2026-10-28"');
     const text = html.replace(/<[^>]+>/g, '');
-    expect(text).toContain('2026-10-27 · ok 7 · retry 0 · fail 0');
-    expect(text).toContain('2026-10-28 · ok 10 · retry 4 · fail 1');
+    expect(text).toContain('2026-10-27 Â· ok 7 Â· retry 0 Â· fail 0');
+    expect(text).toContain('2026-10-28 Â· ok 10 Â· retry 4 Â· fail 1');
     expect(html).toContain('<span class="warn">fail 1</span>');
   });
 
